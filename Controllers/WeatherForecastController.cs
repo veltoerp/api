@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Velto.Data;
 
 namespace api.Controllers;
 
@@ -12,21 +15,29 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+     private readonly VeltoContext _context;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger,VeltoContext context)
     {
+        _context = context;
         _logger = logger;
     }
+    // public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    // {
+    //     _logger = logger;
+    // }
 
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        var users = _context.Users.ToList();
+        return (IEnumerable<WeatherForecast>)users;
+        // return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        // {
+        //     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+        //     TemperatureC = Random.Shared.Next(-20, 55),
+        //     Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        // })
+        // .ToArray();
     }
 }
