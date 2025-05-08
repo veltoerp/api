@@ -1,4 +1,4 @@
-
+namespace api.Models;
 public class Tenant
 {
     public Guid Id { get; set; } 

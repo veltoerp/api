@@ -1,4 +1,5 @@
 
+namespace api.Models;
 public class Role
 {
     public Guid Id { get; set; } 
