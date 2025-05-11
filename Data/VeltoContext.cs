@@ -16,7 +16,44 @@ public class VeltoContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Tenant>().ToTable("tenants");
+        modelBuilder.Entity<Tenant>(entity =>
+        {
+            entity.ToTable("tenants");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("gen_random_uuid()");
+
+            entity.Property(e => e.Name)
+                .HasColumnName("name")
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.HasIndex(e => e.Name)
+                .IsUnique();
+
+            entity.Property(e => e.LanguageCode)
+                .HasColumnName("language_code");
+
+            entity.Property(e => e.CurrencyCode)
+                .HasColumnName("currency_code")
+                .HasMaxLength(3);
+
+            entity.Property(e => e.TimeZone)
+                .HasColumnName("time_zone")
+                .HasDefaultValue("UTC");
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("NOW()");
+
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnName("updated_at")
+                .HasDefaultValueSql("NOW()");
+        });
+
 
         modelBuilder.Entity<User>(entity =>
         {
