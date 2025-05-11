@@ -9,6 +9,9 @@ dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 
+dotnet add package BCrypt.Net-Next
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+
 ## tables
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
