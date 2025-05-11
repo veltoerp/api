@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api.Controllers;
 using api.Models;
+using api.Dtos;
 using Velto.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using api.Dtos;
 
 namespace api.Controllers;
 
@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginModel request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var user = await _context.Users
             .Include(u => u.TenantId)
