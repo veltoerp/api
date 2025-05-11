@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Velto.Data;
 
 namespace api.Controllers;
@@ -28,10 +29,10 @@ public class WeatherForecastController : ControllerBase
     // }
 
     [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    public async Task<IActionResult> Get()
     {
-        var users = _context.Users.ToList();
-        return (IEnumerable<WeatherForecast>)users;
+        var users = await _context.Users.ToListAsync();
+        return Ok(users);
         // return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         // {
         //     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
@@ -40,4 +41,24 @@ public class WeatherForecastController : ControllerBase
         // })
         // .ToArray();
     }
+    // public async Task<IActionResult> GetCurrentUser()
+    // {
+    //     var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+    //     if (userId == null)
+    //     {
+    //         return Unauthorized();
+    //     }
+
+    //     var user = await _context.Users
+    //         .Include(u => u.TenantId)
+    //         .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+    //     if (user == null)
+    //     {
+    //         return NotFound();
+    //     }
+
+    //     return Ok(user);
+    // }
 }
