@@ -104,7 +104,24 @@ public class VeltoContext : DbContext
             //     .OnDelete(DeleteBehavior.SetNull);
             entity.ToTable("users");
         });
-        modelBuilder.Entity<Role>().ToTable("roles");
+        modelBuilder.Entity<Role>(entity =>
+       {
+            entity.ToTable("roles");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id")
+                .HasDefaultValueSql("gen_random_uuid()");
+
+            entity.Property(e => e.TenantId)
+                .HasColumnName("tenant_id");
+
+            entity.Property(e => e.Name)
+                .HasColumnName("name")
+                .HasMaxLength(255)
+                .IsRequired();            
+      });
 
     }
 }
