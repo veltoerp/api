@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api.Controllers;
 using api.Models;
 using api.Dtos;
-using Velto.Data;
+using api.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 

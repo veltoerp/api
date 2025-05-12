@@ -2,7 +2,7 @@ using api.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-namespace Velto.Data;
+namespace api.Data;
 public class VeltoContext : DbContext
 {
     public VeltoContext(DbContextOptions<VeltoContext> options) : base(options)
