@@ -3,69 +3,42 @@ using Microsoft.EntityFrameworkCore;
 using api.Models;
 using api.Dtos;
 using api.Data;
+using api.Utils;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using api.Services;
 
 namespace api.Controllers;
 
 public class AuthController : ControllerBase
 {
     private readonly VeltoContext _context;
+    private readonly TokenService _tokenService;
 
-    public AuthController(VeltoContext context)
+    public AuthController(VeltoContext context,TokenService tokenService)
     {
         _context = context;
+        _tokenService = tokenService;
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
-    {
-        var user = await _context.Users
-            .Include(u => u.TenantId)
-            .FirstOrDefaultAsync(u => u.Email == request.Email && u.PasswordHash == request.Password);
-
-        if (user == null)
+   [HttpPost("login")]
+    public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+    {      
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        if (user == null || !Helper.VerifyPassword(request.Password, user.PasswordHash))
         {
-            return Unauthorized();
+            return Unauthorized(new { message = "Invalid credentials" });
         }
-
-        // var claims = new List<Claim>
-        // {
-        //     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        //     new Claim(ClaimTypes.Name, user.Name),
-        //     new Claim("TenantId", user.TenantId.ToString())
-        // };
-
-        // var identity = new ClaimsIdentity(claims, "Custom");
-        // var principal = new ClaimsPrincipal(identity);
-
-        return Ok(new { Token = "fake-jwt-token" });
+        var userDto = new UserDto
+        {
+            Id = user.Id,
+            TenantId = user.TenantId,
+            Email = user.Email
+        };
+        var token = _tokenService.GenerateToken(user);
+        return Ok(new LoginResponse { Token = token, User = userDto});
     }
-    // [HttpPost("register")   ]
-    // public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-    // {
-    //     var existingUser = await _context.Users
-    //         .FirstOrDefaultAsync(u => u.Email == request.Email);
-
-    //     if (existingUser != null)
-    //     {
-    //         return BadRequest("User already exists");
-    //     }
-
-    //     var user = new User
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         TenantId = request.TenantId,
-    //         Email = request.Email,
-    //         PasswordHash = request.Password,
-    //         CreatedAt = DateTime.UtcNow
-    //     };
-
-    //     _context.Users.Add(user);
-    //     await _context.SaveChangesAsync();
-
-    //     return Ok(new { user.Id });
-    // }
+ 
     [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> GetCurrentUser()

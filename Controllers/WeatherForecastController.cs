@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api.Data;
-
+using api.Utils;
 namespace api.Controllers;
 
 [ApiController]
@@ -27,19 +27,18 @@ public class WeatherForecastController : ControllerBase
     // {
     //     _logger = logger;
     // }
-
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet("hash")]
+    public IActionResult HashPassword(string password)
+    {
+        var hashedPassword = Helper.HashPassword(password);
+        return Ok(hashedPassword);
+    }
+    
+    [HttpGet("forecast")]
     public async Task<IActionResult> Get()
     {
         var users = await _context.Users.ToListAsync();
-        return Ok(users);
-        // return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        // {
-        //     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //     TemperatureC = Random.Shared.Next(-20, 55),
-        //     Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        // })
-        // .ToArray();
+        return Ok(users);        
     }
     // public async Task<IActionResult> GetCurrentUser()
     // {

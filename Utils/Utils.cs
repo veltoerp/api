@@ -3,7 +3,7 @@ using System.Text;
 using BCrypt.Net;
 namespace api.Utils;
 
-public static class Utils
+public static class Helper
 {
     // genarete hash password
     public static string HashPassword(string password)
