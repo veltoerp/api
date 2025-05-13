@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using api.Services;
 
 namespace api.Controllers;
-
+[ApiController]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly VeltoContext _context;
