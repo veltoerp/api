@@ -51,7 +51,7 @@ public class VeltoContext : DbContext
 
             entity.Property(e => e.UpdatedAt)
                 .HasColumnName("updated_at")
-                .HasDefaultValueSql("NOW()");
+                .HasDefaultValueSql("NOW()");            
         });
 
 
@@ -97,31 +97,31 @@ public class VeltoContext : DbContext
             //     .HasForeignKey(e => e.TenantId)
             //     .OnDelete(DeleteBehavior.Cascade);
 
-            // Foreign key: role_id → roles.id (ON DELETE SET NULL)
-            // entity.HasOne<Role>()
-            //     .WithMany()
-            //     .HasForeignKey(e => e.RoleId)
-            //     .OnDelete(DeleteBehavior.SetNull);
+            //Foreign key: role_id → roles.id (ON DELETE SET NULL)
+           entity.HasOne(u => u.Role)
+                .WithMany()
+                .HasForeignKey(u => u.RoleId)            
+                .OnDelete(DeleteBehavior.SetNull);
             entity.ToTable("users");
         });
         modelBuilder.Entity<Role>(entity =>
        {
-            entity.ToTable("roles");
+           entity.ToTable("roles");
 
-            entity.HasKey(e => e.Id);
+           entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id)
-                .HasColumnName("id")
-                .HasDefaultValueSql("gen_random_uuid()");
+           entity.Property(e => e.Id)
+               .HasColumnName("id")
+               .HasDefaultValueSql("gen_random_uuid()");
 
-            entity.Property(e => e.TenantId)
-                .HasColumnName("tenant_id");
+           entity.Property(e => e.TenantId)
+               .HasColumnName("tenant_id");
 
-            entity.Property(e => e.Name)
-                .HasColumnName("name")
-                .HasMaxLength(255)
-                .IsRequired();            
-      });
+           entity.Property(e => e.Name)
+               .HasColumnName("name")
+               .HasMaxLength(255)
+               .IsRequired();
+       });
 
     }
 }

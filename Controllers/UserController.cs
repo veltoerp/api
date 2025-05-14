@@ -1,15 +1,18 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using api.Data;
 using api.Models; 
 using api.Dtos; 
-using api.Utils; 
+using api.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly VeltoContext _context;

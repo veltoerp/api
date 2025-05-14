@@ -37,7 +37,11 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("forecast")]
     public async Task<IActionResult> Get()
     {
-        var users = await _context.Users.ToListAsync();
+        /*
+       var users = await _context.Users.ToListAsync();
+        
+        */
+        var users = await _context.Users.Include(u => u.Role).ToListAsync();
         return Ok(users);        
     }
     // public async Task<IActionResult> GetCurrentUser()
