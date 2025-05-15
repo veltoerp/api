@@ -41,8 +41,9 @@ public class WeatherForecastController : ControllerBase
        var users = await _context.Users.ToListAsync();
         
         */
-        var users = await _context.Users.Include(u => u.Role).ToListAsync();
-        return Ok(users);        
+        var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == "fatihgokce07@gmail.com");
+        //var users = await _context.Users.Include(u => u.Role).ToListAsync();
+        return Ok(user);        
     }
     // public async Task<IActionResult> GetCurrentUser()
     // {

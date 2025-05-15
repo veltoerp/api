@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
    [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
     {      
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == request.Email);
         if (user == null || !Helper.VerifyPassword(request.Password, user.PasswordHash))
         {
             return Unauthorized(new { message = "Invalid credentials" });

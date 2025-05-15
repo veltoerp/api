@@ -19,9 +19,10 @@ public class TokenService
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim("TenantId", user.TenantId.ToString()),
+            new Claim(ClaimTypes.Role,user.Role.Name)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
